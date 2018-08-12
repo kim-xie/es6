@@ -1,0 +1,109 @@
+1、es6简介
+ECMAScript6.0 简称（ES6/ECMA6.0/ECMA2015），在2015年6月正式发布，目标是使用JavaScript语言来编写复杂的大型应用程序，成为企业级开发语言，是下一代JavaScript语言的标准。
+ECMAScript 规定了浏览器脚本语言的标准，-- ECMA -国际标准化组织，是规定浏览器脚本语言的标准的定制者。
+javascript是Netscape公司制定的，ECMAScript 和 JavaScript 的关系是，前者是后者的规格，后者是前者的一种实现
+ECMAScript一开始是针对javascript语言做定制的。
+1995 -- JavaScript诞生
+1996 -- Netscape公司将javascript移交给ECMA
+1997 -- ES1.0 -- javascript版本趋于稳定
+2000 -- ES6定制的起点
+2009、12 -- ECMAScript5.0 正式发布
+2011、6 -- ECMAscript 5.1 版发布，并且成为 ISO 国际标准（ISO/IEC 16262:2011）
+2013、3 -- ECMAScript 6 草案冻结，不再添加新功能。新的功能设想将被放到 ECMAScript7
+2013、12 -- ECMAScript 6 草案发布。然后是 12 个月的讨论期，听取各方反馈
+2015、6 -- ECMAScript 6 正式通过，成为国际标准。从 2000 年算起，这时已经过去了 15 年。
+
+2、兼容性
+浏览器对ES5的兼容情况：http://kangax.github.io/compat-table/es5/
+浏览器对ES6的兼容情况：http://kangax.github.io/compat-table/es6/
+由于es6是2015年6月正式发布，所以浏览器的标准早已出现，所以会对某些浏览器兼容性不是很好。
+
+2.1、IE10+、chrome、Firefox、nodejs、移动端兼容性会好一些
+
+2.2、使用转换器将ES6转换为浏览器识别的ES5，常用的转换器有Babel、和谷歌的Traceur，支持在线转换、命令行转换、插入网页等方式
+
+2.2.1、在线转换：
+Babel在线转换地址：https://babeljs.io/repl/
+Traceur在线转换地址：http://google.github.io/traceur-compiler/demo/repl.html
+
+2.2.2、命令行转码：
+Babel 提供babel-cli工具，用于命令行转码：
+安装：
+$ npm install --global babel-cli
+基本使用：
+
+# 转码结果输出到标准输出
+$ babel example.js
+
+# 转码结果写入一个文件
+# --out-file 或 -o 参数指定输出文件
+$ babel example.js --out-file compiled.js
+# 或者
+$ babel example.js -o compiled.js
+
+# 整个目录转码
+# --out-dir 或 -d 参数指定输出目录
+$ babel src --out-dir lib
+# 或者
+$ babel src -d lib
+
+# -s 参数生成source map文件
+$ babel src -d lib -s
+
+Traceur命令行转码：
+安装：
+$ npm install -g traceur
+
+基本使用：
+# --script 输入的文件  --out 输出的文件
+$ traceur --script calc.es6.js --out calc.es5.js
+
+2.2.3、插入网页方式：
+babel方式:
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.4.4/babel.min.js"></script>
+<script type="text/babel">
+  // Your ES6 code
+  import './Greeter.js';
+</script>
+
+traceur方式:
+<script src="https://google.github.io/traceur-compiler/bin/traceur.js"></script>
+<script src="https://google.github.io/traceur-compiler/bin/BrowserSystem.js"></script>
+<script src="https://google.github.io/traceur-compiler/src/bootstrap.js"></script>
+<script type="module">
+  import './Greeter.js';
+</script>
+这种方式是网页会实时将ES6转换为ES5，会影响性能。正确的做法是先将ES6转换为ES5后再插入网页运行。
+
+3、es6新特性
+3.1、变量与常量
+  ES5中变量的声明：var
+  (1)、可以重复声明 -- 属性覆盖
+  (2)、支持变量提升 -- 将变量的声明提升到作用域最前面
+  (3)、没有块级作用域 -- 只有全局作用域和函数作用域
+  (4)、没有不可修改限制 -- 即var只能声明变量
+
+  ES6中变量的声明：
+  let:
+    不可以重复声明：
+    let a = "12";
+    let a = "a";
+    console.log(a);//Uncaught SyntaxError: Identifier 'a' has already been declared
+
+    不支持变量提升：
+    console.log(test);//undefined
+    var test = "test";
+    等价于 ==>
+    var test;
+    console.log(test);
+    test = "test";
+
+    console.log(test);//Uncaught ReferenceError: test1 is not defined
+    let test = "test";
+
+    有块级作用域：
+    if(true){
+
+    }
+
+  const: 不可以重复声明，

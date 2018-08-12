@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>const -- 常量</title>
+  </head>
+  <body>
+    <script>
+      window.onload = function(){
+
+        // 不可重复声明相同的变量名
+        //const a = "12";
+        //console.log(a); // 不会打印
+        //var a = "a";
+        //console.log(a); // 报错 Uncaught SyntaxError: Identifier 'a' has already been declared
+
+        // 值不可修改
+        const a = 1;
+        console.log(a); // 1
+        a = 2; // 修改a的属性值
+        console.log(a); // 报错 Uncaught TypeError: Assignment to constant variable.
+        const c = 2;
+        console.log(c); // 不打印
+
+        /* ES5实现对象属性不可修改 */
+        var obj = {};
+        Object.defineProperty(obj,"age",{
+          value: 25, // 属性的值，默认为undefined
+          writable: false, // 属性的值是否可以被重写,默认为false
+          enumerable: true, // 此属性是否可以被枚举（使用for...in或Object.keys()）,默认为false
+          configurable: true, // 是否可以删除目标属性或是否可以再次修改属性的特性（writable, configurable, enumerable）。设置为true可以被删除或可以重新设置特性；设置为false，不能被可以被删除或不可以重新设置特性。默认为false
+          // setter/getter和value、writable不能一起使用，用了setter/getter，就不允许使用value、writable
+          //set: function(newValue){
+            // 给属性设置新值
+          //},
+          //get: function(){
+            // 获取属性值
+          //}
+        });
+        //console.log(obj.age); // 25
+        //obj.age = 26;
+        //console.log(obj.age); // 25 -- 不可修改但是不会报错
+
+        // 不允许变量提升
+        //console.log(test);//undefined
+        //var test = 1;
+        //等价于==》
+        //var test;
+        //console.log(test);
+        //test = 1;
+
+        //console.log(test1); // 报错 Uncaught ReferenceError: test1 is not defined
+        //const test1 = 1;
+        //console.log(test1); // 不执行
+
+        // 块级作用域
+        //if(true){
+        //  const a = 1;
+        //  var b = 2;
+        //  console.log(a);// 1
+        //  console.log(b);// 2
+        //}
+        //console.log(b);// 2 -- var没有块级作用域限制
+        //console.log(a);// Uncaught ReferenceError: a is not defined -- 报错后不会往下执行
+
+      }
+    </script>
+  </body>
+</html>
