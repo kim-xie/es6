@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>arrow function -- 箭头函数 </title>
+  </head>
+  <body>
+    <script>
+      window.onload = function(){
+
+        // 1、函数声明式
+        function fn(){
+          ...
+        }
+        // 2、函数表达式
+        var fn = function (){
+          ...
+        }
+        // 3、构造函数式
+        var fn = new Function(a,b,...);
+        // 等同于
+        function fn(a,b){
+          ...
+        }
+
+        // es6中的箭头函数和es5中的函数比较
+        // js中的函数定义
+        var func = function (arg){
+          return arg+arg;
+        }
+        console.log(func(2)); // 4
+
+        // es6箭头函数等同于上面的js函数
+        var func = arg => arg+arg;
+        console.log(func(2)); // 4
+
+        // 由上面例子可知箭头函数相当于匿名函数，简化了函数定义。箭头函数格式： () => {...}
+        // 1、当函数的参数有且只有一个参数时，箭头函数的()可以省略，例如上面的例子
+        //
+        // 有且仅有一个参数()可省略
+        var fn = a => a;
+        console.log(fn(1)); // 1
+
+        // 无参数时()不可省略:
+        var fn = () => "全世界最帅的男人";
+        console.log(fn()); // 全世界最帅的男人
+
+        //var fn = => "无参数时不带()"; // Uncaught SyntaxError: Unexpected token =>
+        //console.log(fn());
+
+        // 多参数时()不可省略:
+        var fn = (x, y) => {
+            var sum = x + y;
+            return sum;
+        }
+        console.log(fn(1,2)); // 3
+
+        // 2、当且仅当函数的返回值只有一个return，并且只有单条语句时，箭头函数的{}和return可以省略，例如上面的例子
+
+        // 有且仅有单条语句，且只有一个return，才可省略{}和return
+        var fn = () => "只有一条语句，且只有一个return";
+        console.log(fn()); // "只有一条语句，且只有一个return"
+
+        //var fn = () => let a = "牛逼"; a; // Uncaught SyntaxError: Unexpected identifier
+        //console.log(fn());
+
+        var fn = () => {
+          let a = "流弊";
+          return a;
+        }
+        console.log(fn()); // 流弊
+
+        // 3、当只有一条语句返回一个对象时，必须要使用({...})，因为对象的{...}和函数体的{...}冲突了
+        var fn = () => {name: "小帅哥"}
+        console.log(fn()); // undefined
+
+        var fn = () => ({name: "小帅哥"})
+        console.log(fn()); // {name: "小帅哥"}
+
+        // 多条语句时带{}返回对象没问题
+        var fn = () => {
+          let a = 0;
+          return {name: "大帅哥"};
+        }
+        console.log(fn()); // {name: "小帅哥"}
+
+        // 4、箭头函数和匿名函数的区别在于：箭头函数内部的this是词法作用域，由上下文确定, 因此箭头函数没法用作构造函数
+
+        // js函数中的this指向问题
+        name = "大帅哥"; // 等价 window.name = "大帅哥";
+        var obj = {
+          name: "小帅哥",
+          age: 18,
+          say: function(){
+            // 此时的this是，谁调用它就指向谁，而现在是fn()--即window.fn();所以它指向的是window
+            // 此时可以使用一个变量接收obj对象，就可指向obj。var _this = this;
+            /**
+              var _this = this;
+              var fn = function(){
+                console.log(this); // window
+                console.log("我是："+this.name); // 我是：大帅哥
+                console.log("我是："+_this.name);// 我是：小帅哥
+              }
+              return fn();
+            **/
+            // js函数可以使用call\apply改变this的指向
+            var fn = function (){
+              console.log(this); // obj
+              console.log("我是："+this.name); // 我是：小帅哥
+            }
+            return fn.call(this); // 传入obj对象
+          }
+        }
+        //obj.say();
+
+        // es6箭头函数this的指向问题
+        name = "大帅哥"; // 等价 window.name = "大帅哥";
+        var obj2 = {
+          name: "小帅哥",
+          age: 19,
+          say: function(){
+            // 此时箭头函数体内的this指向的是obj2,解决了es5中的var _this = this;问题
+            /**
+              var fn = () => {
+                console.log(this); // obj2
+                console.log("我是："+this.name) // 我是：小帅哥
+              }
+              return fn();
+            **/
+
+            // es6箭头函数无法使用call/apply改变this的指向问题，call/apply第一个参数(即对象)默认会被忽略掉
+            var fn = () => {
+              console.log(this); // obj
+              console.log("我是："+this.name); // 我是：小帅哥
+            }
+            return fn.call(window); // 传入window对象
+          }
+        }
+        //obj2.say();
+
+        // 5、箭头函数娶不到arguments参数,但是可以通过可变参数实现
+
+        // es5函数可以获取arguments参数
+        var fn = function (a,b){
+          console.log(arguments); // Arguments(2) [1, 2, callee: ƒ, Symbol(Symbol.iterator): ƒ]
+          console.log(arguments.length); // 2
+          console.log(arguments[0]); // 1
+        }
+        fn(1,2);
+
+        // 箭头函数获取不到arguments参数
+        var fn = (a,b) => {
+          console.log(arguments); // Arguments [Event, callee: ƒ, Symbol(Symbol.iterator): ƒ]
+          console.log(arguments.length); // 1
+          console.log(arguments[0]); // Event {isTrusted: true, type: "load", target: document, currentTarget: Window, eventPhase: 2, …}
+        }
+        fn(1,2);
+
+        // 箭头函数可以通过可变参数获得传入的参数
+        var fn = (...args) => {
+          console.log(args); // (2) [1, 2]
+          console.log(args.length); // 2
+          console.log(args[0]); // 1
+        }
+        fn(1,2);
+
+        /**
+         * 总结：（箭头函数相当于匿名函数，简化了函数定义）
+         * 1、当且仅当只有一个参数时，箭头函数左边()可以省略，但在无参数或多参数的情况下不能省略
+         * 2、当且仅当函数体只有单条语句时，箭头函数右边{}可以省略，且只有一个return时，return也可省略
+         * 3、当且仅当函数体只有单条语句时，返回一个对象必须写成({...})，因为对象的{...}和函数体的{...}冲突了
+         * 4、箭头函数不绑定this,所以不能使用call/apply来改变this的指向，也不能当构造函数使用（涉及到this的指向一定要谨慎使用）
+         * 5、箭头函数不绑定arguments,要想获取箭头函数的参数可以使用可变参数获取 (...args) => {console.log(args.length)}
+         */
+
+      }
+    </script>
+  </body>
+</html>
