@@ -14,7 +14,7 @@
         // 5、同步、微异步、异步的执行步骤
         // 6、promise有哪些特征
         // 7、api详解
-
+        // javascript语言本身是单线程的。同一时刻，有且仅有一处代码正在执行。包括setTime的那两个函数也是如此。所有涉及到异步的方法和函数都是由浏览器的另一个线程去执行的，程序员所能控制的"另一个线程"也仅限于这些方法。
         let promise = new Promise(function(resolve,reject){
           // 执行一些异步代码...
           if(/*异步操作成功*/){
@@ -63,7 +63,7 @@
           throw new error();
         });
 
-        
+
 
       }
     </script>
