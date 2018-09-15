@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>string -- 扩展 </title>
+  </head>
+  <body>
+    <script>
+      window.onload = function(){
+        // ES6 对字符串的扩展
+        // 1、判断某字符串是否包含在另外字符串中
+        // ES5中使用的是indexOf方法判断某字符串是否包含在另外字符串中
+        // ES6中新增了includes()\startsWith()\endsWith()方法
+        /*
+          str.includes(arg) -- 返回Boolean值，表示在str中是否找到了arg这个参数字符串
+          str.startsWith(arg) -- 返回Boolean值，表示在str中是否以arg这个参数字符串开头
+          str.endsWith(arg) -- 返回Boolean值，表示在str中是否以arg这个参数字符串结尾
+         */
+        let str = 'hellow man';
+        console.log(str.includes(' ')); // true
+        console.log(str.startsWith('hellow')); // true
+        console.log(str.endsWith('man')); // true
+
+        /*
+          第二个参数：index 代表开始搜索的位置(字符串索引)
+          str.includes(arg,index) -- 表示索引index后(包含index)的字符串，包含arg字符串
+          str.startsWith(arg,index) -- 表示索引index后(包含index)的字符串，以arg开头
+          str.endsWith(arg,index) -- 特别注意：表示索引index之前(不包含index)的字符串，以arg结尾
+         */
+         console.log(str.includes(' ',5)); // true
+         console.log(str.includes('w',5)); // true
+         console.log(str.startsWith('hellow',5)); // false
+         console.log(str.startsWith('w',5)); // true
+         console.log(str.endsWith('man',5)); // false
+         console.log(str.endsWith('w',5)); // false
+         console.log(str.endsWith('o',5)); // true
+
+         // 2、ES6中对原字符串重复后，返回新的字符串： str.repeat(arg) arg为字符串重复的次数
+         // 2.1、若arg为小数：则先取整
+         console.log(str.repeat(1.8)); // hellow man
+         console.log(str.repeat(2.8)); // hellow manhellow man
+
+         // 2.2、若arg为负数或者Infinity，会报错 但不影响上面已经执行的代码
+         // console.log(str.repeat(-1)); // Uncaught RangeError: Invalid count value
+         // console.log(str.repeat(Infinity)); // Uncaught RangeError: Invalid count value
+
+         // 2.3、若arg为 0 到 -1 之间的小数，则等同于 0，先取整为-0，即等同于0
+         console.log(str.repeat(-0.8)); // ""
+         console.log(str.repeat(-0.4)); // ""
+
+         // 2.4、若arg为 NaN(not a number)即视为0
+         console.log(str.repeat('NaN')); // ""
+         console.log(str.repeat(NaN)); // ""
+
+         // 2.5、若arg为非数字，要先转为数字
+         console.log(str.repeat('2')); // hellow manhellow man
+         console.log(str.repeat('a')); // ""
+         console.log(str.repeat(undefined)); // ""
+         console.log(str.repeat(false)); // ""
+         console.log(str.repeat(true)); // hellow man
+
+         // 3、ES6中的模板字符串
+         // 3.1、ES5中的模板字符串：需要""或''或.join('')\.join("")进行拼接
+         let people = {
+           name: 'kim',
+           age: 18,
+           like: 'study'
+         };
+
+         console.log(" I am "+people.name+
+                     " now is "+people.age+
+                     " year old! "+
+                     " my favorite is "+people.like);
+         // I am kim now is 18 year old!  my favorite is study
+
+         // 3.2、ES6中使用反引号(``)包裹字符串，字符串可换行，可嵌入变量。变量名必须以${...}这种格式才被解析
+         console.log(`
+                    I am ${people.name}
+                    now is ${people.age}
+                    year old!
+                    my favorite is ${people.like}`);
+        /*
+
+                   I am kim
+                   now is 18
+                   year old!
+                   my favorite is study
+        输出的格式不会去掉换行\缩进和空格： 使用.trim()方法消除
+        */
+
+        console.log(`
+                   I am ${people.name}
+                   now is ${people.age}
+                   year old!
+                   my favorite is ${people.like}`.trim());
+        /**
+         * I am kim
+                   now is 18
+                   year old!
+                   my favorite is study
+         */
+
+        // 3.3、模板字符串使用反引号，则需要使用反斜杠转义
+        console.log(`ha ha \`he he\``); // ha ha `he he`
+
+        // 3.4、模板字符串中的花括号里可以是任意的Js表达式，可以进行运算，以及引用对象属性
+        const a = 1;
+        const b = 2;
+        const obj = {a: 3,b: 4};
+
+        console.log(`${a} + ${a+b}`); // 1 + 3
+        console.log(`${a} + ${a*b}`); // 1 + 2
+        console.log(`${a} + ${b} = ${obj.a}`); // 1 + 2 = 3
+
+        // 3.5、模板字符串之中调用函数（执行函数）
+        function fn(){
+          return 'hellow world!';
+        }
+        console.log(`${fn()}`); // hellow world!
+        console.log(`${(function(){return "ha ha ha"})()}`); // ha ha ha
+
+        // 3.6、如果花括号里不是字符串则需要先转为字符串,如对象属性不是字符串则默认调用.toString()
+        console.log(typeof obj.a); // number
+        console.log(`i am ${obj.a}`); // i am 3
+
+        // 3.7、如果花括号中是字符串，则会原样输出
+        console.log(`ha ha ${'he he'}`); // ha ha he he
+
+        // 3.8、如果花括号里的变量没有声明则会报错
+        // console.log(`hehe 未定义 ${hehe}`); // Uncaught ReferenceError: hehe is not defined
+
+        // 3.9、模板字符串嵌套使用(必须是在花括号内才可正常嵌套)
+        console.log(`i am outer ${`you are inner`}`);
+
+        function fn(name){
+          return 'he he '+`my name is ${name}`;
+        }
+
+        console.log(fn('kim')); // he he my name is kim
+
+        // 4、字符串的遍历器接口
+        // 4.1、字符串可以被for...of循环遍历
+        for(let key of 'abc'){
+          console.log(key);
+        }
+        // a
+        // b
+        // c
+
+        // 4.2、遍历器最大的优点是可以识别大于0xFFFF的码点，传统的for循环无法识别这样的码点
+        let text = String.fromCodePoint(0x20BB7);
+        for (let i = 0; i < text.length; i++) {
+          console.log(text[i]);
+        }
+        // 乱码
+        // 乱码
+        for (let i of text) {
+          console.log(i);
+        }
+        // "𠮷"
+        /*
+          上面代码中，字符串text只有一个字符，但是for循环会认为它包含两个字符（都不可打印）
+          而for...of循环会正确识别出这一个字符
+         */
+      }
+    </script>
+  </body>
+</html>
